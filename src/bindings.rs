@@ -1900,6 +1900,7 @@ pub const VIRTIO_ID_MEM: u32 = 24;
 pub const VIRTIO_ID_FS: u32 = 26;
 pub const VIRTIO_ID_PMEM: u32 = 27;
 pub const VIRTIO_ID_MAC80211_HWSIM: u32 = 29;
+pub const VIRTIO_ID_I2C_ADAPTER: u32 = 34;
 pub type size_t = ::std::os::raw::c_ulong;
 extern "C" {
     pub fn memcpy(
