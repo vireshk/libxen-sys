@@ -1910,6 +1910,18 @@ pub const VIRTIO_TRANS_ID_CONSOLE: u32 = 1003;
 pub const VIRTIO_TRANS_ID_SCSI: u32 = 1004;
 pub const VIRTIO_TRANS_ID_RNG: u32 = 1005;
 pub const VIRTIO_TRANS_ID_9P: u32 = 1009;
+pub const VIRTIO_MEM_F_ACPI_PXM: u32 = 0;
+pub const VIRTIO_MEM_REQ_PLUG: u32 = 0;
+pub const VIRTIO_MEM_REQ_UNPLUG: u32 = 1;
+pub const VIRTIO_MEM_REQ_UNPLUG_ALL: u32 = 2;
+pub const VIRTIO_MEM_REQ_STATE: u32 = 3;
+pub const VIRTIO_MEM_RESP_ACK: u32 = 0;
+pub const VIRTIO_MEM_RESP_NACK: u32 = 1;
+pub const VIRTIO_MEM_RESP_BUSY: u32 = 2;
+pub const VIRTIO_MEM_RESP_ERROR: u32 = 3;
+pub const VIRTIO_MEM_STATE_PLUGGED: u32 = 0;
+pub const VIRTIO_MEM_STATE_UNPLUGGED: u32 = 1;
+pub const VIRTIO_MEM_STATE_MIXED: u32 = 2;
 pub const VIRTIO_MMIO_MAGIC_VALUE: u32 = 0;
 pub const VIRTIO_MMIO_VERSION: u32 = 4;
 pub const VIRTIO_MMIO_DEVICE_ID: u32 = 8;
@@ -1944,6 +1956,22 @@ pub const VIRTIO_MMIO_CONFIG_GENERATION: u32 = 252;
 pub const VIRTIO_MMIO_CONFIG: u32 = 256;
 pub const VIRTIO_MMIO_INT_VRING: u32 = 1;
 pub const VIRTIO_MMIO_INT_CONFIG: u32 = 2;
+pub const VRING_DESC_F_NEXT: u32 = 1;
+pub const VRING_DESC_F_WRITE: u32 = 2;
+pub const VRING_DESC_F_INDIRECT: u32 = 4;
+pub const VRING_PACKED_DESC_F_AVAIL: u32 = 7;
+pub const VRING_PACKED_DESC_F_USED: u32 = 15;
+pub const VRING_USED_F_NO_NOTIFY: u32 = 1;
+pub const VRING_AVAIL_F_NO_INTERRUPT: u32 = 1;
+pub const VRING_PACKED_EVENT_FLAG_ENABLE: u32 = 0;
+pub const VRING_PACKED_EVENT_FLAG_DISABLE: u32 = 1;
+pub const VRING_PACKED_EVENT_FLAG_DESC: u32 = 2;
+pub const VRING_PACKED_EVENT_F_WRAP_CTR: u32 = 15;
+pub const VIRTIO_RING_F_INDIRECT_DESC: u32 = 28;
+pub const VIRTIO_RING_F_EVENT_IDX: u32 = 29;
+pub const VRING_AVAIL_ALIGN_SIZE: u32 = 2;
+pub const VRING_USED_ALIGN_SIZE: u32 = 4;
+pub const VRING_DESC_ALIGN_SIZE: u32 = 16;
 pub type size_t = ::std::os::raw::c_ulong;
 extern "C" {
     pub fn memcpy(
@@ -60691,6 +60719,849 @@ pub type __be64 = __u64;
 pub type __sum16 = __u16;
 pub type __wsum = __u32;
 pub type __poll_t = ::std::os::raw::c_uint;
+pub type __virtio16 = __u16;
+pub type __virtio32 = __u32;
+pub type __virtio64 = __u64;
+#[repr(C)]
+#[derive(Debug, Copy, Clone)]
+pub struct virtio_mem_req_plug {
+    pub addr: __virtio64,
+    pub nb_blocks: __virtio16,
+    pub padding: [__virtio16; 3usize],
+}
+#[test]
+fn bindgen_test_layout_virtio_mem_req_plug() {
+    assert_eq!(
+        ::std::mem::size_of::<virtio_mem_req_plug>(),
+        16usize,
+        concat!("Size of: ", stringify!(virtio_mem_req_plug))
+    );
+    assert_eq!(
+        ::std::mem::align_of::<virtio_mem_req_plug>(),
+        8usize,
+        concat!("Alignment of ", stringify!(virtio_mem_req_plug))
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<virtio_mem_req_plug>())).addr as *const _ as usize },
+        0usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(virtio_mem_req_plug),
+            "::",
+            stringify!(addr)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<virtio_mem_req_plug>())).nb_blocks as *const _ as usize },
+        8usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(virtio_mem_req_plug),
+            "::",
+            stringify!(nb_blocks)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<virtio_mem_req_plug>())).padding as *const _ as usize },
+        10usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(virtio_mem_req_plug),
+            "::",
+            stringify!(padding)
+        )
+    );
+}
+#[repr(C)]
+#[derive(Debug, Copy, Clone)]
+pub struct virtio_mem_req_unplug {
+    pub addr: __virtio64,
+    pub nb_blocks: __virtio16,
+    pub padding: [__virtio16; 3usize],
+}
+#[test]
+fn bindgen_test_layout_virtio_mem_req_unplug() {
+    assert_eq!(
+        ::std::mem::size_of::<virtio_mem_req_unplug>(),
+        16usize,
+        concat!("Size of: ", stringify!(virtio_mem_req_unplug))
+    );
+    assert_eq!(
+        ::std::mem::align_of::<virtio_mem_req_unplug>(),
+        8usize,
+        concat!("Alignment of ", stringify!(virtio_mem_req_unplug))
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<virtio_mem_req_unplug>())).addr as *const _ as usize },
+        0usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(virtio_mem_req_unplug),
+            "::",
+            stringify!(addr)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<virtio_mem_req_unplug>())).nb_blocks as *const _ as usize },
+        8usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(virtio_mem_req_unplug),
+            "::",
+            stringify!(nb_blocks)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<virtio_mem_req_unplug>())).padding as *const _ as usize },
+        10usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(virtio_mem_req_unplug),
+            "::",
+            stringify!(padding)
+        )
+    );
+}
+#[repr(C)]
+#[derive(Debug, Copy, Clone)]
+pub struct virtio_mem_req_state {
+    pub addr: __virtio64,
+    pub nb_blocks: __virtio16,
+    pub padding: [__virtio16; 3usize],
+}
+#[test]
+fn bindgen_test_layout_virtio_mem_req_state() {
+    assert_eq!(
+        ::std::mem::size_of::<virtio_mem_req_state>(),
+        16usize,
+        concat!("Size of: ", stringify!(virtio_mem_req_state))
+    );
+    assert_eq!(
+        ::std::mem::align_of::<virtio_mem_req_state>(),
+        8usize,
+        concat!("Alignment of ", stringify!(virtio_mem_req_state))
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<virtio_mem_req_state>())).addr as *const _ as usize },
+        0usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(virtio_mem_req_state),
+            "::",
+            stringify!(addr)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<virtio_mem_req_state>())).nb_blocks as *const _ as usize },
+        8usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(virtio_mem_req_state),
+            "::",
+            stringify!(nb_blocks)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<virtio_mem_req_state>())).padding as *const _ as usize },
+        10usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(virtio_mem_req_state),
+            "::",
+            stringify!(padding)
+        )
+    );
+}
+#[repr(C)]
+#[derive(Copy, Clone)]
+pub struct virtio_mem_req {
+    pub type_: __virtio16,
+    pub padding: [__virtio16; 3usize],
+    pub u: virtio_mem_req__bindgen_ty_1,
+}
+#[repr(C)]
+#[derive(Copy, Clone)]
+pub union virtio_mem_req__bindgen_ty_1 {
+    pub plug: virtio_mem_req_plug,
+    pub unplug: virtio_mem_req_unplug,
+    pub state: virtio_mem_req_state,
+}
+#[test]
+fn bindgen_test_layout_virtio_mem_req__bindgen_ty_1() {
+    assert_eq!(
+        ::std::mem::size_of::<virtio_mem_req__bindgen_ty_1>(),
+        16usize,
+        concat!("Size of: ", stringify!(virtio_mem_req__bindgen_ty_1))
+    );
+    assert_eq!(
+        ::std::mem::align_of::<virtio_mem_req__bindgen_ty_1>(),
+        8usize,
+        concat!("Alignment of ", stringify!(virtio_mem_req__bindgen_ty_1))
+    );
+    assert_eq!(
+        unsafe {
+            &(*(::std::ptr::null::<virtio_mem_req__bindgen_ty_1>())).plug as *const _ as usize
+        },
+        0usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(virtio_mem_req__bindgen_ty_1),
+            "::",
+            stringify!(plug)
+        )
+    );
+    assert_eq!(
+        unsafe {
+            &(*(::std::ptr::null::<virtio_mem_req__bindgen_ty_1>())).unplug as *const _ as usize
+        },
+        0usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(virtio_mem_req__bindgen_ty_1),
+            "::",
+            stringify!(unplug)
+        )
+    );
+    assert_eq!(
+        unsafe {
+            &(*(::std::ptr::null::<virtio_mem_req__bindgen_ty_1>())).state as *const _ as usize
+        },
+        0usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(virtio_mem_req__bindgen_ty_1),
+            "::",
+            stringify!(state)
+        )
+    );
+}
+#[test]
+fn bindgen_test_layout_virtio_mem_req() {
+    assert_eq!(
+        ::std::mem::size_of::<virtio_mem_req>(),
+        24usize,
+        concat!("Size of: ", stringify!(virtio_mem_req))
+    );
+    assert_eq!(
+        ::std::mem::align_of::<virtio_mem_req>(),
+        8usize,
+        concat!("Alignment of ", stringify!(virtio_mem_req))
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<virtio_mem_req>())).type_ as *const _ as usize },
+        0usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(virtio_mem_req),
+            "::",
+            stringify!(type_)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<virtio_mem_req>())).padding as *const _ as usize },
+        2usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(virtio_mem_req),
+            "::",
+            stringify!(padding)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<virtio_mem_req>())).u as *const _ as usize },
+        8usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(virtio_mem_req),
+            "::",
+            stringify!(u)
+        )
+    );
+}
+#[repr(C)]
+#[derive(Debug, Copy, Clone)]
+pub struct virtio_mem_resp_state {
+    pub state: __virtio16,
+}
+#[test]
+fn bindgen_test_layout_virtio_mem_resp_state() {
+    assert_eq!(
+        ::std::mem::size_of::<virtio_mem_resp_state>(),
+        2usize,
+        concat!("Size of: ", stringify!(virtio_mem_resp_state))
+    );
+    assert_eq!(
+        ::std::mem::align_of::<virtio_mem_resp_state>(),
+        2usize,
+        concat!("Alignment of ", stringify!(virtio_mem_resp_state))
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<virtio_mem_resp_state>())).state as *const _ as usize },
+        0usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(virtio_mem_resp_state),
+            "::",
+            stringify!(state)
+        )
+    );
+}
+#[repr(C)]
+#[derive(Copy, Clone)]
+pub struct virtio_mem_resp {
+    pub type_: __virtio16,
+    pub padding: [__virtio16; 3usize],
+    pub u: virtio_mem_resp__bindgen_ty_1,
+}
+#[repr(C)]
+#[derive(Copy, Clone)]
+pub union virtio_mem_resp__bindgen_ty_1 {
+    pub state: virtio_mem_resp_state,
+}
+#[test]
+fn bindgen_test_layout_virtio_mem_resp__bindgen_ty_1() {
+    assert_eq!(
+        ::std::mem::size_of::<virtio_mem_resp__bindgen_ty_1>(),
+        2usize,
+        concat!("Size of: ", stringify!(virtio_mem_resp__bindgen_ty_1))
+    );
+    assert_eq!(
+        ::std::mem::align_of::<virtio_mem_resp__bindgen_ty_1>(),
+        2usize,
+        concat!("Alignment of ", stringify!(virtio_mem_resp__bindgen_ty_1))
+    );
+    assert_eq!(
+        unsafe {
+            &(*(::std::ptr::null::<virtio_mem_resp__bindgen_ty_1>())).state as *const _ as usize
+        },
+        0usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(virtio_mem_resp__bindgen_ty_1),
+            "::",
+            stringify!(state)
+        )
+    );
+}
+#[test]
+fn bindgen_test_layout_virtio_mem_resp() {
+    assert_eq!(
+        ::std::mem::size_of::<virtio_mem_resp>(),
+        10usize,
+        concat!("Size of: ", stringify!(virtio_mem_resp))
+    );
+    assert_eq!(
+        ::std::mem::align_of::<virtio_mem_resp>(),
+        2usize,
+        concat!("Alignment of ", stringify!(virtio_mem_resp))
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<virtio_mem_resp>())).type_ as *const _ as usize },
+        0usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(virtio_mem_resp),
+            "::",
+            stringify!(type_)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<virtio_mem_resp>())).padding as *const _ as usize },
+        2usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(virtio_mem_resp),
+            "::",
+            stringify!(padding)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<virtio_mem_resp>())).u as *const _ as usize },
+        8usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(virtio_mem_resp),
+            "::",
+            stringify!(u)
+        )
+    );
+}
+#[repr(C)]
+#[derive(Debug, Copy, Clone)]
+pub struct virtio_mem_config {
+    pub block_size: __le64,
+    pub node_id: __le16,
+    pub padding: [__u8; 6usize],
+    pub addr: __le64,
+    pub region_size: __le64,
+    pub usable_region_size: __le64,
+    pub plugged_size: __le64,
+    pub requested_size: __le64,
+}
+#[test]
+fn bindgen_test_layout_virtio_mem_config() {
+    assert_eq!(
+        ::std::mem::size_of::<virtio_mem_config>(),
+        56usize,
+        concat!("Size of: ", stringify!(virtio_mem_config))
+    );
+    assert_eq!(
+        ::std::mem::align_of::<virtio_mem_config>(),
+        8usize,
+        concat!("Alignment of ", stringify!(virtio_mem_config))
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<virtio_mem_config>())).block_size as *const _ as usize },
+        0usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(virtio_mem_config),
+            "::",
+            stringify!(block_size)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<virtio_mem_config>())).node_id as *const _ as usize },
+        8usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(virtio_mem_config),
+            "::",
+            stringify!(node_id)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<virtio_mem_config>())).padding as *const _ as usize },
+        10usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(virtio_mem_config),
+            "::",
+            stringify!(padding)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<virtio_mem_config>())).addr as *const _ as usize },
+        16usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(virtio_mem_config),
+            "::",
+            stringify!(addr)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<virtio_mem_config>())).region_size as *const _ as usize },
+        24usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(virtio_mem_config),
+            "::",
+            stringify!(region_size)
+        )
+    );
+    assert_eq!(
+        unsafe {
+            &(*(::std::ptr::null::<virtio_mem_config>())).usable_region_size as *const _ as usize
+        },
+        32usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(virtio_mem_config),
+            "::",
+            stringify!(usable_region_size)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<virtio_mem_config>())).plugged_size as *const _ as usize },
+        40usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(virtio_mem_config),
+            "::",
+            stringify!(plugged_size)
+        )
+    );
+    assert_eq!(
+        unsafe {
+            &(*(::std::ptr::null::<virtio_mem_config>())).requested_size as *const _ as usize
+        },
+        48usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(virtio_mem_config),
+            "::",
+            stringify!(requested_size)
+        )
+    );
+}
+#[repr(C)]
+#[derive(Debug, Copy, Clone)]
+pub struct vring_desc {
+    pub addr: __virtio64,
+    pub len: __virtio32,
+    pub flags: __virtio16,
+    pub next: __virtio16,
+}
+#[test]
+fn bindgen_test_layout_vring_desc() {
+    assert_eq!(
+        ::std::mem::size_of::<vring_desc>(),
+        16usize,
+        concat!("Size of: ", stringify!(vring_desc))
+    );
+    assert_eq!(
+        ::std::mem::align_of::<vring_desc>(),
+        8usize,
+        concat!("Alignment of ", stringify!(vring_desc))
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<vring_desc>())).addr as *const _ as usize },
+        0usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(vring_desc),
+            "::",
+            stringify!(addr)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<vring_desc>())).len as *const _ as usize },
+        8usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(vring_desc),
+            "::",
+            stringify!(len)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<vring_desc>())).flags as *const _ as usize },
+        12usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(vring_desc),
+            "::",
+            stringify!(flags)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<vring_desc>())).next as *const _ as usize },
+        14usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(vring_desc),
+            "::",
+            stringify!(next)
+        )
+    );
+}
+#[repr(C)]
+#[derive(Debug)]
+pub struct vring_avail {
+    pub flags: __virtio16,
+    pub idx: __virtio16,
+    pub ring: __IncompleteArrayField<__virtio16>,
+}
+#[test]
+fn bindgen_test_layout_vring_avail() {
+    assert_eq!(
+        ::std::mem::size_of::<vring_avail>(),
+        4usize,
+        concat!("Size of: ", stringify!(vring_avail))
+    );
+    assert_eq!(
+        ::std::mem::align_of::<vring_avail>(),
+        2usize,
+        concat!("Alignment of ", stringify!(vring_avail))
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<vring_avail>())).flags as *const _ as usize },
+        0usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(vring_avail),
+            "::",
+            stringify!(flags)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<vring_avail>())).idx as *const _ as usize },
+        2usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(vring_avail),
+            "::",
+            stringify!(idx)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<vring_avail>())).ring as *const _ as usize },
+        4usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(vring_avail),
+            "::",
+            stringify!(ring)
+        )
+    );
+}
+#[repr(C)]
+#[derive(Debug, Copy, Clone)]
+pub struct vring_used_elem {
+    pub id: __virtio32,
+    pub len: __virtio32,
+}
+#[test]
+fn bindgen_test_layout_vring_used_elem() {
+    assert_eq!(
+        ::std::mem::size_of::<vring_used_elem>(),
+        8usize,
+        concat!("Size of: ", stringify!(vring_used_elem))
+    );
+    assert_eq!(
+        ::std::mem::align_of::<vring_used_elem>(),
+        4usize,
+        concat!("Alignment of ", stringify!(vring_used_elem))
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<vring_used_elem>())).id as *const _ as usize },
+        0usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(vring_used_elem),
+            "::",
+            stringify!(id)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<vring_used_elem>())).len as *const _ as usize },
+        4usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(vring_used_elem),
+            "::",
+            stringify!(len)
+        )
+    );
+}
+pub type vring_used_elem_t = vring_used_elem;
+#[repr(C)]
+#[derive(Debug)]
+pub struct vring_used {
+    pub flags: __virtio16,
+    pub idx: __virtio16,
+    pub ring: __IncompleteArrayField<vring_used_elem_t>,
+}
+#[test]
+fn bindgen_test_layout_vring_used() {
+    assert_eq!(
+        ::std::mem::size_of::<vring_used>(),
+        4usize,
+        concat!("Size of: ", stringify!(vring_used))
+    );
+    assert_eq!(
+        ::std::mem::align_of::<vring_used>(),
+        4usize,
+        concat!("Alignment of ", stringify!(vring_used))
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<vring_used>())).flags as *const _ as usize },
+        0usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(vring_used),
+            "::",
+            stringify!(flags)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<vring_used>())).idx as *const _ as usize },
+        2usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(vring_used),
+            "::",
+            stringify!(idx)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<vring_used>())).ring as *const _ as usize },
+        4usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(vring_used),
+            "::",
+            stringify!(ring)
+        )
+    );
+}
+pub type vring_desc_t = vring_desc;
+pub type vring_avail_t = vring_avail;
+pub type vring_used_t = vring_used;
+#[repr(C)]
+#[derive(Debug, Copy, Clone)]
+pub struct vring {
+    pub num: ::std::os::raw::c_uint,
+    pub desc: *mut vring_desc_t,
+    pub avail: *mut vring_avail_t,
+    pub used: *mut vring_used_t,
+}
+#[test]
+fn bindgen_test_layout_vring() {
+    assert_eq!(
+        ::std::mem::size_of::<vring>(),
+        32usize,
+        concat!("Size of: ", stringify!(vring))
+    );
+    assert_eq!(
+        ::std::mem::align_of::<vring>(),
+        8usize,
+        concat!("Alignment of ", stringify!(vring))
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<vring>())).num as *const _ as usize },
+        0usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(vring),
+            "::",
+            stringify!(num)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<vring>())).desc as *const _ as usize },
+        8usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(vring),
+            "::",
+            stringify!(desc)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<vring>())).avail as *const _ as usize },
+        16usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(vring),
+            "::",
+            stringify!(avail)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<vring>())).used as *const _ as usize },
+        24usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(vring),
+            "::",
+            stringify!(used)
+        )
+    );
+}
+#[repr(C)]
+#[derive(Debug, Copy, Clone)]
+pub struct vring_packed_desc_event {
+    pub off_wrap: __le16,
+    pub flags: __le16,
+}
+#[test]
+fn bindgen_test_layout_vring_packed_desc_event() {
+    assert_eq!(
+        ::std::mem::size_of::<vring_packed_desc_event>(),
+        4usize,
+        concat!("Size of: ", stringify!(vring_packed_desc_event))
+    );
+    assert_eq!(
+        ::std::mem::align_of::<vring_packed_desc_event>(),
+        2usize,
+        concat!("Alignment of ", stringify!(vring_packed_desc_event))
+    );
+    assert_eq!(
+        unsafe {
+            &(*(::std::ptr::null::<vring_packed_desc_event>())).off_wrap as *const _ as usize
+        },
+        0usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(vring_packed_desc_event),
+            "::",
+            stringify!(off_wrap)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<vring_packed_desc_event>())).flags as *const _ as usize },
+        2usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(vring_packed_desc_event),
+            "::",
+            stringify!(flags)
+        )
+    );
+}
+#[repr(C)]
+#[derive(Debug, Copy, Clone)]
+pub struct vring_packed_desc {
+    pub addr: __le64,
+    pub len: __le32,
+    pub id: __le16,
+    pub flags: __le16,
+}
+#[test]
+fn bindgen_test_layout_vring_packed_desc() {
+    assert_eq!(
+        ::std::mem::size_of::<vring_packed_desc>(),
+        16usize,
+        concat!("Size of: ", stringify!(vring_packed_desc))
+    );
+    assert_eq!(
+        ::std::mem::align_of::<vring_packed_desc>(),
+        8usize,
+        concat!("Alignment of ", stringify!(vring_packed_desc))
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<vring_packed_desc>())).addr as *const _ as usize },
+        0usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(vring_packed_desc),
+            "::",
+            stringify!(addr)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<vring_packed_desc>())).len as *const _ as usize },
+        8usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(vring_packed_desc),
+            "::",
+            stringify!(len)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<vring_packed_desc>())).id as *const _ as usize },
+        12usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(vring_packed_desc),
+            "::",
+            stringify!(id)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<vring_packed_desc>())).flags as *const _ as usize },
+        14usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(vring_packed_desc),
+            "::",
+            stringify!(flags)
+        )
+    );
+}
 extern "C" {
     pub fn xen_mb();
 }
