@@ -1881,6 +1881,25 @@ pub const VIRTIO_MMIO_CONFIG_GENERATION: u32 = 252;
 pub const VIRTIO_MMIO_CONFIG: u32 = 256;
 pub const VIRTIO_MMIO_INT_VRING: u32 = 1;
 pub const VIRTIO_MMIO_INT_CONFIG: u32 = 2;
+pub const VIRTIO_ID_NET: u32 = 1;
+pub const VIRTIO_ID_BLOCK: u32 = 2;
+pub const VIRTIO_ID_CONSOLE: u32 = 3;
+pub const VIRTIO_ID_RNG: u32 = 4;
+pub const VIRTIO_ID_BALLOON: u32 = 5;
+pub const VIRTIO_ID_RPMSG: u32 = 7;
+pub const VIRTIO_ID_SCSI: u32 = 8;
+pub const VIRTIO_ID_9P: u32 = 9;
+pub const VIRTIO_ID_RPROC_SERIAL: u32 = 11;
+pub const VIRTIO_ID_CAIF: u32 = 12;
+pub const VIRTIO_ID_GPU: u32 = 16;
+pub const VIRTIO_ID_INPUT: u32 = 18;
+pub const VIRTIO_ID_VSOCK: u32 = 19;
+pub const VIRTIO_ID_CRYPTO: u32 = 20;
+pub const VIRTIO_ID_IOMMU: u32 = 23;
+pub const VIRTIO_ID_MEM: u32 = 24;
+pub const VIRTIO_ID_FS: u32 = 26;
+pub const VIRTIO_ID_PMEM: u32 = 27;
+pub const VIRTIO_ID_MAC80211_HWSIM: u32 = 29;
 pub type size_t = ::std::os::raw::c_ulong;
 extern "C" {
     pub fn memcpy(
