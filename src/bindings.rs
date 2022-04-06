@@ -60522,6 +60522,15 @@ pub const xenbus_state_XenbusStateReconfiguring: xenbus_state = 7;
 pub const xenbus_state_XenbusStateReconfigured: xenbus_state = 8;
 pub type xenbus_state = ::std::os::raw::c_uint;
 pub use self::xenbus_state as XenbusState;
+extern "C" {
+    pub fn xen_mb();
+}
+extern "C" {
+    pub fn xen_rmb();
+}
+extern "C" {
+    pub fn xen_wmb();
+}
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct __locale_data {
