@@ -12,4 +12,3 @@
 #include <linux/virtio_mmio.h>
 #include <linux/virtio_ring.h>
 #include <linux/virtio_types.h>
-#include "src/mb.h"

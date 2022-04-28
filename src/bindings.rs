@@ -61562,15 +61562,6 @@ fn bindgen_test_layout_vring_packed_desc() {
         )
     );
 }
-extern "C" {
-    pub fn xen_mb();
-}
-extern "C" {
-    pub fn xen_rmb();
-}
-extern "C" {
-    pub fn xen_wmb();
-}
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct __locale_data {

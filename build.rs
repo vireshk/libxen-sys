@@ -32,18 +32,7 @@ fn generate_bindings() {
         .expect("Couldn't write bindings!");
 }
 
-fn build_mb() {
-    let files = vec!["src/mb.c"];
-
-    // Use the `cc` crate to build a C file and statically link it.
-    cc::Build::new()
-        .files(files)
-        .compile("mb");
-}
-
 fn main() {
     #[cfg(feature = "generate")]
     generate_bindings();
-
-    build_mb();
 }
