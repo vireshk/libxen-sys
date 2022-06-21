@@ -360,6 +360,7 @@ pub const PSR_BIG_ENDIAN: u32 = 512;
 pub const PSR_DBG_MASK: u32 = 512;
 pub const PSR_IT_MASK: u32 = 100727808;
 pub const PSR_JAZELLE: u32 = 16777216;
+pub const PSR_Z: u32 = 1073741824;
 pub const PSR_MODE_USR: u32 = 16;
 pub const PSR_MODE_FIQ: u32 = 17;
 pub const PSR_MODE_IRQ: u32 = 18;
@@ -377,7 +378,7 @@ pub const PSR_MODE_EL2t: u32 = 8;
 pub const PSR_MODE_EL1h: u32 = 5;
 pub const PSR_MODE_EL1t: u32 = 4;
 pub const PSR_MODE_EL0t: u32 = 0;
-pub const PSR_GUEST32_INIT: u32 = 467;
+pub const PSR_GUEST32_INIT: u32 = 1073742291;
 pub const PSR_GUEST64_INIT: u32 = 453;
 pub const GUEST_GICV3_RDIST_REGIONS: u32 = 1;
 pub const GUEST_RAM_BANKS: u32 = 2;
@@ -713,6 +714,8 @@ pub const XENMEM_SHARING_OP_S_HANDLE_INVALID: i32 = -10;
 pub const XENMEM_SHARING_OP_C_HANDLE_INVALID: i32 = -9;
 pub const XENMEM_FORK_WITH_IOMMU_ALLOWED: u32 = 1;
 pub const XENMEM_FORK_BLOCK_INTERRUPTS: u32 = 2;
+pub const XENMEM_FORK_RESET_STATE: u32 = 4;
+pub const XENMEM_FORK_RESET_MEMORY: u32 = 8;
 pub const XENMEM_claim_pages: u32 = 24;
 pub const XENMEM_reserved_device_memory_map: u32 = 27;
 pub const XENMEM_RDM_ALL: u32 = 1;
@@ -1555,6 +1558,9 @@ pub const XEN_PX_PCT: u32 = 1;
 pub const XEN_PX_PSS: u32 = 2;
 pub const XEN_PX_PPC: u32 = 4;
 pub const XEN_PX_PSD: u32 = 8;
+pub const XEN_CPUPERF_SHARED_TYPE_HW: u32 = 1;
+pub const XEN_CPUPERF_SHARED_TYPE_ALL: u32 = 2;
+pub const XEN_CPUPERF_SHARED_TYPE_ANY: u32 = 3;
 pub const XENPF_get_cpuinfo: u32 = 55;
 pub const XEN_PCPU_FLAGS_ONLINE: u32 = 1;
 pub const XEN_PCPU_FLAGS_INVALID: u32 = 2;
@@ -1584,7 +1590,8 @@ pub const XC_CORE_MAGIC: u32 = 4027575277;
 pub const XC_CORE_MAGIC_HVM: u32 = 4027575278;
 pub const XC_CPUPOOL_POOLID_ANY: u32 = 4294967295;
 pub const XC_MAX_ERROR_MSG_LEN: u32 = 1024;
-pub const XENEVTCHN_NO_CLOEXEC: u32 = 1;
+pub const GNTDEV_DMA_FLAG_WC: u32 = 1;
+pub const GNTDEV_DMA_FLAG_COHERENT: u32 = 2;
 pub const _LIBC_LIMITS_H_: u32 = 1;
 pub const MB_LEN_MAX: u32 = 16;
 pub const _BITS_POSIX1_LIM_H: u32 = 1;
@@ -1808,8 +1815,13 @@ pub const XENSTORE_PAYLOAD_MAX: u32 = 4096;
 pub const XENSTORE_ABS_PATH_MAX: u32 = 3072;
 pub const XENSTORE_REL_PATH_MAX: u32 = 2048;
 pub const XENSTORE_SERVER_FEATURE_RECONNECTION: u32 = 1;
+pub const XENSTORE_SERVER_FEATURE_ERROR: u32 = 2;
 pub const XENSTORE_CONNECTED: u32 = 0;
 pub const XENSTORE_RECONNECT: u32 = 1;
+pub const XENSTORE_ERROR_NONE: u32 = 0;
+pub const XENSTORE_ERROR_COMM: u32 = 1;
+pub const XENSTORE_ERROR_RINGIDX: u32 = 2;
+pub const XENSTORE_ERROR_PROTO: u32 = 3;
 pub const XS_PERM_NONE: u32 = 0;
 pub const XS_PERM_READ: u32 = 1;
 pub const XS_PERM_WRITE: u32 = 2;
@@ -59590,149 +59602,351 @@ extern "C" {
         domid: domid_t,
     ) -> ::std::os::raw::c_int;
 }
-pub type xenevtchn_port_or_error_t = ::std::os::raw::c_int;
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
-pub struct xenevtchn_handle {
+pub struct xengntdev_handle {
     _unused: [u8; 0],
 }
+pub type xengnttab_handle = xengntdev_handle;
 extern "C" {
-    pub fn xenevtchn_open(
-        logger: *mut xentoollog_logger,
-        flags: ::std::os::raw::c_uint,
-    ) -> *mut xenevtchn_handle;
-}
-extern "C" {
-    pub fn xenevtchn_fdopen(
-        logger: *mut xentoollog_logger,
-        fd: ::std::os::raw::c_int,
-        open_flags: ::std::os::raw::c_uint,
-    ) -> *mut xenevtchn_handle;
-}
-extern "C" {
-    pub fn xenevtchn_close(xce: *mut xenevtchn_handle) -> ::std::os::raw::c_int;
-}
-extern "C" {
-    pub fn xenevtchn_fd(xce: *mut xenevtchn_handle) -> ::std::os::raw::c_int;
-}
-extern "C" {
-    pub fn xenevtchn_notify(
-        xce: *mut xenevtchn_handle,
-        port: evtchn_port_t,
-    ) -> ::std::os::raw::c_int;
-}
-extern "C" {
-    pub fn xenevtchn_bind_unbound_port(
-        xce: *mut xenevtchn_handle,
-        domid: u32,
-    ) -> xenevtchn_port_or_error_t;
-}
-extern "C" {
-    pub fn xenevtchn_bind_interdomain(
-        xce: *mut xenevtchn_handle,
-        domid: u32,
-        remote_port: evtchn_port_t,
-    ) -> xenevtchn_port_or_error_t;
-}
-extern "C" {
-    pub fn xenevtchn_bind_virq(
-        xce: *mut xenevtchn_handle,
-        virq: ::std::os::raw::c_uint,
-    ) -> xenevtchn_port_or_error_t;
-}
-extern "C" {
-    pub fn xenevtchn_unbind(
-        xce: *mut xenevtchn_handle,
-        port: evtchn_port_t,
-    ) -> ::std::os::raw::c_int;
-}
-extern "C" {
-    pub fn xenevtchn_pending(xce: *mut xenevtchn_handle) -> xenevtchn_port_or_error_t;
-}
-extern "C" {
-    pub fn xenevtchn_unmask(
-        xce: *mut xenevtchn_handle,
-        port: evtchn_port_t,
-    ) -> ::std::os::raw::c_int;
-}
-extern "C" {
-    pub fn xenevtchn_restrict(xce: *mut xenevtchn_handle, domid: domid_t) -> ::std::os::raw::c_int;
-}
-extern "C" {
-    pub fn xenforeignmemory_open(
+    pub fn xengnttab_open(
         logger: *mut xentoollog_logger,
         open_flags: ::std::os::raw::c_uint,
-    ) -> *mut xenforeignmemory_handle;
+    ) -> *mut xengnttab_handle;
 }
 extern "C" {
-    pub fn xenforeignmemory_close(fmem: *mut xenforeignmemory_handle) -> ::std::os::raw::c_int;
+    pub fn xengnttab_close(xgt: *mut xengnttab_handle) -> ::std::os::raw::c_int;
 }
 extern "C" {
-    pub fn xenforeignmemory_map(
-        fmem: *mut xenforeignmemory_handle,
-        dom: u32,
+    pub fn xengnttab_fd(xgt: *mut xengnttab_handle) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn xengnttab_map_grant_ref(
+        xgt: *mut xengnttab_handle,
+        domid: u32,
+        ref_: u32,
         prot: ::std::os::raw::c_int,
-        pages: size_t,
-        arr: *const xen_pfn_t,
-        err: *mut ::std::os::raw::c_int,
     ) -> *mut ::std::os::raw::c_void;
 }
 extern "C" {
-    pub fn xenforeignmemory_map2(
-        fmem: *mut xenforeignmemory_handle,
-        dom: u32,
-        addr: *mut ::std::os::raw::c_void,
+    pub fn xengnttab_map_grant_refs(
+        xgt: *mut xengnttab_handle,
+        count: u32,
+        domids: *mut u32,
+        refs: *mut u32,
         prot: ::std::os::raw::c_int,
-        flags: ::std::os::raw::c_int,
-        pages: size_t,
-        arr: *const xen_pfn_t,
-        err: *mut ::std::os::raw::c_int,
     ) -> *mut ::std::os::raw::c_void;
 }
 extern "C" {
-    pub fn xenforeignmemory_unmap(
-        fmem: *mut xenforeignmemory_handle,
-        addr: *mut ::std::os::raw::c_void,
-        pages: size_t,
+    pub fn xengnttab_map_domain_grant_refs(
+        xgt: *mut xengnttab_handle,
+        count: u32,
+        domid: u32,
+        refs: *mut u32,
+        prot: ::std::os::raw::c_int,
+    ) -> *mut ::std::os::raw::c_void;
+}
+extern "C" {
+    pub fn xengnttab_map_grant_ref_notify(
+        xgt: *mut xengnttab_handle,
+        domid: u32,
+        ref_: u32,
+        prot: ::std::os::raw::c_int,
+        notify_offset: u32,
+        notify_port: evtchn_port_t,
+    ) -> *mut ::std::os::raw::c_void;
+}
+extern "C" {
+    pub fn xengnttab_unmap(
+        xgt: *mut xengnttab_handle,
+        start_address: *mut ::std::os::raw::c_void,
+        count: u32,
     ) -> ::std::os::raw::c_int;
 }
 extern "C" {
-    pub fn xenforeignmemory_restrict(
-        fmem: *mut xenforeignmemory_handle,
-        domid: domid_t,
+    pub fn xengnttab_set_max_grants(
+        xgt: *mut xengnttab_handle,
+        nr_grants: u32,
     ) -> ::std::os::raw::c_int;
 }
 #[repr(C)]
+#[derive(Copy, Clone)]
+pub struct xengnttab_grant_copy_segment {
+    pub source: xengnttab_grant_copy_segment_xengnttab_copy_ptr,
+    pub dest: xengnttab_grant_copy_segment_xengnttab_copy_ptr,
+    pub len: u16,
+    pub flags: u16,
+    pub status: i16,
+}
+#[repr(C)]
+#[derive(Copy, Clone)]
+pub union xengnttab_grant_copy_segment_xengnttab_copy_ptr {
+    pub virt: *mut ::std::os::raw::c_void,
+    pub foreign: xengnttab_grant_copy_segment_xengnttab_copy_ptr__bindgen_ty_1,
+}
+#[repr(C)]
 #[derive(Debug, Copy, Clone)]
-pub struct xenforeignmemory_resource_handle {
-    _unused: [u8; 0],
+pub struct xengnttab_grant_copy_segment_xengnttab_copy_ptr__bindgen_ty_1 {
+    pub ref_: u32,
+    pub offset: u16,
+    pub domid: u16,
 }
-extern "C" {
-    pub fn xenforeignmemory_map_resource(
-        fmem: *mut xenforeignmemory_handle,
-        domid: domid_t,
-        type_: ::std::os::raw::c_uint,
-        id: ::std::os::raw::c_uint,
-        frame: ::std::os::raw::c_ulong,
-        nr_frames: ::std::os::raw::c_ulong,
-        paddr: *mut *mut ::std::os::raw::c_void,
-        prot: ::std::os::raw::c_int,
-        flags: ::std::os::raw::c_int,
-    ) -> *mut xenforeignmemory_resource_handle;
+#[test]
+fn bindgen_test_layout_xengnttab_grant_copy_segment_xengnttab_copy_ptr__bindgen_ty_1() {
+    assert_eq!(
+        ::std::mem::size_of::<xengnttab_grant_copy_segment_xengnttab_copy_ptr__bindgen_ty_1>(),
+        8usize,
+        concat!(
+            "Size of: ",
+            stringify!(xengnttab_grant_copy_segment_xengnttab_copy_ptr__bindgen_ty_1)
+        )
+    );
+    assert_eq!(
+        ::std::mem::align_of::<xengnttab_grant_copy_segment_xengnttab_copy_ptr__bindgen_ty_1>(),
+        4usize,
+        concat!(
+            "Alignment of ",
+            stringify!(xengnttab_grant_copy_segment_xengnttab_copy_ptr__bindgen_ty_1)
+        )
+    );
+    assert_eq!(
+        unsafe {
+            &(*(::std::ptr::null::<xengnttab_grant_copy_segment_xengnttab_copy_ptr__bindgen_ty_1>(
+            )))
+            .ref_ as *const _ as usize
+        },
+        0usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(xengnttab_grant_copy_segment_xengnttab_copy_ptr__bindgen_ty_1),
+            "::",
+            stringify!(ref_)
+        )
+    );
+    assert_eq!(
+        unsafe {
+            &(*(::std::ptr::null::<xengnttab_grant_copy_segment_xengnttab_copy_ptr__bindgen_ty_1>(
+            )))
+            .offset as *const _ as usize
+        },
+        4usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(xengnttab_grant_copy_segment_xengnttab_copy_ptr__bindgen_ty_1),
+            "::",
+            stringify!(offset)
+        )
+    );
+    assert_eq!(
+        unsafe {
+            &(*(::std::ptr::null::<xengnttab_grant_copy_segment_xengnttab_copy_ptr__bindgen_ty_1>(
+            )))
+            .domid as *const _ as usize
+        },
+        6usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(xengnttab_grant_copy_segment_xengnttab_copy_ptr__bindgen_ty_1),
+            "::",
+            stringify!(domid)
+        )
+    );
 }
+#[test]
+fn bindgen_test_layout_xengnttab_grant_copy_segment_xengnttab_copy_ptr() {
+    assert_eq!(
+        ::std::mem::size_of::<xengnttab_grant_copy_segment_xengnttab_copy_ptr>(),
+        8usize,
+        concat!(
+            "Size of: ",
+            stringify!(xengnttab_grant_copy_segment_xengnttab_copy_ptr)
+        )
+    );
+    assert_eq!(
+        ::std::mem::align_of::<xengnttab_grant_copy_segment_xengnttab_copy_ptr>(),
+        8usize,
+        concat!(
+            "Alignment of ",
+            stringify!(xengnttab_grant_copy_segment_xengnttab_copy_ptr)
+        )
+    );
+    assert_eq!(
+        unsafe {
+            &(*(::std::ptr::null::<xengnttab_grant_copy_segment_xengnttab_copy_ptr>())).virt
+                as *const _ as usize
+        },
+        0usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(xengnttab_grant_copy_segment_xengnttab_copy_ptr),
+            "::",
+            stringify!(virt)
+        )
+    );
+    assert_eq!(
+        unsafe {
+            &(*(::std::ptr::null::<xengnttab_grant_copy_segment_xengnttab_copy_ptr>())).foreign
+                as *const _ as usize
+        },
+        0usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(xengnttab_grant_copy_segment_xengnttab_copy_ptr),
+            "::",
+            stringify!(foreign)
+        )
+    );
+}
+#[test]
+fn bindgen_test_layout_xengnttab_grant_copy_segment() {
+    assert_eq!(
+        ::std::mem::size_of::<xengnttab_grant_copy_segment>(),
+        24usize,
+        concat!("Size of: ", stringify!(xengnttab_grant_copy_segment))
+    );
+    assert_eq!(
+        ::std::mem::align_of::<xengnttab_grant_copy_segment>(),
+        8usize,
+        concat!("Alignment of ", stringify!(xengnttab_grant_copy_segment))
+    );
+    assert_eq!(
+        unsafe {
+            &(*(::std::ptr::null::<xengnttab_grant_copy_segment>())).source as *const _ as usize
+        },
+        0usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(xengnttab_grant_copy_segment),
+            "::",
+            stringify!(source)
+        )
+    );
+    assert_eq!(
+        unsafe {
+            &(*(::std::ptr::null::<xengnttab_grant_copy_segment>())).dest as *const _ as usize
+        },
+        8usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(xengnttab_grant_copy_segment),
+            "::",
+            stringify!(dest)
+        )
+    );
+    assert_eq!(
+        unsafe {
+            &(*(::std::ptr::null::<xengnttab_grant_copy_segment>())).len as *const _ as usize
+        },
+        16usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(xengnttab_grant_copy_segment),
+            "::",
+            stringify!(len)
+        )
+    );
+    assert_eq!(
+        unsafe {
+            &(*(::std::ptr::null::<xengnttab_grant_copy_segment>())).flags as *const _ as usize
+        },
+        18usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(xengnttab_grant_copy_segment),
+            "::",
+            stringify!(flags)
+        )
+    );
+    assert_eq!(
+        unsafe {
+            &(*(::std::ptr::null::<xengnttab_grant_copy_segment>())).status as *const _ as usize
+        },
+        20usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(xengnttab_grant_copy_segment),
+            "::",
+            stringify!(status)
+        )
+    );
+}
+pub type xengnttab_grant_copy_segment_t = xengnttab_grant_copy_segment;
 extern "C" {
-    pub fn xenforeignmemory_unmap_resource(
-        fmem: *mut xenforeignmemory_handle,
-        fres: *mut xenforeignmemory_resource_handle,
+    pub fn xengnttab_grant_copy(
+        xgt: *mut xengnttab_handle,
+        count: u32,
+        segs: *mut xengnttab_grant_copy_segment_t,
     ) -> ::std::os::raw::c_int;
 }
 extern "C" {
-    pub fn xenforeignmemory_resource_size(
-        fmem: *mut xenforeignmemory_handle,
-        domid: domid_t,
-        type_: ::std::os::raw::c_uint,
-        id: ::std::os::raw::c_uint,
-        size: *mut size_t,
+    pub fn xengnttab_dmabuf_exp_from_refs(
+        xgt: *mut xengnttab_handle,
+        domid: u32,
+        flags: u32,
+        count: u32,
+        refs: *const u32,
+        fd: *mut u32,
+    ) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn xengnttab_dmabuf_exp_wait_released(
+        xgt: *mut xengnttab_handle,
+        fd: u32,
+        wait_to_ms: u32,
+    ) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn xengnttab_dmabuf_imp_to_refs(
+        xgt: *mut xengnttab_handle,
+        domid: u32,
+        fd: u32,
+        count: u32,
+        refs: *mut u32,
+    ) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn xengnttab_dmabuf_imp_release(
+        xgt: *mut xengnttab_handle,
+        fd: u32,
+    ) -> ::std::os::raw::c_int;
+}
+pub type xengntshr_handle = xengntdev_handle;
+extern "C" {
+    pub fn xengntshr_open(
+        logger: *mut xentoollog_logger,
+        open_flags: ::std::os::raw::c_uint,
+    ) -> *mut xengntshr_handle;
+}
+extern "C" {
+    pub fn xengntshr_close(xgs: *mut xengntshr_handle) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn xengntshr_fd(xgs: *mut xengntshr_handle) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn xengntshr_share_pages(
+        xgs: *mut xengntshr_handle,
+        domid: u32,
+        count: ::std::os::raw::c_int,
+        refs: *mut u32,
+        writable: ::std::os::raw::c_int,
+    ) -> *mut ::std::os::raw::c_void;
+}
+extern "C" {
+    pub fn xengntshr_share_page_notify(
+        xgs: *mut xengntshr_handle,
+        domid: u32,
+        ref_: *mut u32,
+        writable: ::std::os::raw::c_int,
+        notify_offset: u32,
+        notify_port: evtchn_port_t,
+    ) -> *mut ::std::os::raw::c_void;
+}
+extern "C" {
+    pub fn xengntshr_unshare(
+        xgs: *mut xengntshr_handle,
+        start_address: *mut ::std::os::raw::c_void,
+        count: u32,
     ) -> ::std::os::raw::c_int;
 }
 extern "C" {
@@ -59881,12 +60095,13 @@ pub struct xenstore_domain_interface {
     pub rsp_prod: XENSTORE_RING_IDX,
     pub server_features: u32,
     pub connection: u32,
+    pub error: u32,
 }
 #[test]
 fn bindgen_test_layout_xenstore_domain_interface() {
     assert_eq!(
         ::std::mem::size_of::<xenstore_domain_interface>(),
-        2072usize,
+        2076usize,
         concat!("Size of: ", stringify!(xenstore_domain_interface))
     );
     assert_eq!(
@@ -59985,6 +60200,16 @@ fn bindgen_test_layout_xenstore_domain_interface() {
             stringify!(xenstore_domain_interface),
             "::",
             stringify!(connection)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<xenstore_domain_interface>())).error as *const _ as usize },
+        2072usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(xenstore_domain_interface),
+            "::",
+            stringify!(error)
         )
     );
 }
