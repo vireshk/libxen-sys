@@ -1,8 +1,6 @@
 #include <string.h>
 #include <xenctrl.h>
 #include <xendevicemodel.h>
-#include <xenevtchn.h>
-#include <xenforeignmemory.h>
 #include <xengnttab.h>
 #include <xenstore.h>
 #include <xen/hvm/ioreq.h>
