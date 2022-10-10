@@ -11,10 +11,6 @@
 )]
 
 mod bindings_raw {
-    #[cfg(feature = "generate")]
-    include!(concat!(env!("OUT_DIR"), "/bindings.rs"));
-
-    #[cfg(not(feature = "generate"))]
     include!("bindings.rs");
 }
 pub use bindings_raw::*;

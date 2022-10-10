@@ -1,8 +1,6 @@
 #[cfg(feature = "generate")]
 extern crate bindgen;
 #[cfg(feature = "generate")]
-use std::env;
-#[cfg(feature = "generate")]
 use std::path::PathBuf;
 
 #[cfg(feature = "generate")]
@@ -26,9 +24,9 @@ fn generate_bindings() {
         .expect("Unable to generate bindings");
 
     // Write the bindings to the $OUT_DIR/bindings.rs file.
-    let out_path = PathBuf::from(env::var("OUT_DIR").unwrap());
+    let out_path = PathBuf::from("src/bindings.rs");
     bindings
-        .write_to_file(out_path.join("bindings.rs"))
+        .write_to_file(out_path)
         .expect("Couldn't write bindings!");
 }
 
